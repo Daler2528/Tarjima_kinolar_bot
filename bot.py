@@ -2,10 +2,10 @@ import os
 from asyncio import run
 from aiogram.types import Message , BotCommand
 from dotenv import load_dotenv
-from functions import start,stop,check_join,admin,start_menu,check_channel_join
+from functions import start,stop,check_join,admin,start_menu,check_channel_join,start_answer
 from filters import CheckSubFilter
 from aiogram import Bot , Dispatcher
-from aiogram.filters import Command
+from aiogram.filters import Command ,CommandStart
 from aiogram import F
 
 
@@ -26,6 +26,7 @@ async def main(dp) -> None:
         ]
     )
     dp.startup.register(start)
+    dp.message.register(start_answer, CommandStart())
     dp.message.register(admin, Command('admin'))
     dp.message.register(start_menu, Command('start'))
     dp.callback_query.register(check_channel_join, F.data == "check_subscription")

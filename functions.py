@@ -2,6 +2,7 @@ from aiogram import Bot
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message , BotCommand , CallbackQuery
 from keyboards import channel_list
+from db import Database
 
 
 async def start(bot: Bot):
@@ -28,3 +29,11 @@ async def admin(message: Message, bot: Bot, state: FSMContext):
 async def check_channel_join(query: CallbackQuery,bot:Bot,*args,**kwargs):
     await bot.send_message(chat_id=query.from_user.id , text="👋 Assalomu aleykum, botimizga xush kelipsiz")
     await query.answer("")
+
+async def start_answer(message: Message):
+    db = Database()
+    await message.answer(f'Hello @{message.from_user.username}')
+    if await db.select_user_id(str(message.from_user.id)):
+        await db.insert_user_id(str(message.from_user.id))
+    else:
+        await message.answer('Siz royxatda borsiz!')
